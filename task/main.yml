@@ -1,0 +1,34 @@
+---
+- name: Cloning the "{{ repo_name }}" repo
+  git:
+    repo: "{{ source_url }}"
+    dest: '{{ git_dir }}/{{ repo_name }}'
+    version: master
+    #clone: yes
+    update: no
+
+- name: fetch specific branches
+  shell: |
+    git --git-dir={{ git_dir }}/{{ repo_name }}/.git fetch origin
+    git --git-dir={{ git_dir }}/{{ repo_name }}/.git show-ref refs/heads/{{ item }}
+    if [ $? -eq 0 ]
+    then
+        #echo "branch {{ item }} exists"
+        git --git-dir={{ git_dir }}/{{ repo_name }}/.git checkout {{ item }}
+        git --git-dir={{ git_dir }}/{{ repo_name }}/.git pull
+    else
+        #echo "branch {{ item }} not exists $?" 
+        git --git-dir={{ git_dir }}/{{ repo_name }}/.git checkout --track origin/{{ item }}
+    fi
+  with_items: "{{ branches }}"
+
+- name: Add alternate remote
+  ini_file:
+    dest: '{{ git_dir }}/{{ repo_name }}/.git/config'
+    section: 'remote "mirrored"'
+    option: url
+    value: "{{ dest_url }}"
+  tags: configuration
+ 
+- name: Push the repo to alternate remote
+  shell: 'git --git-dir={{ git_dir }}/{{ repo_name }}/.git push --all mirrored'
