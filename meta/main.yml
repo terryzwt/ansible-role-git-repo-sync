@@ -1,0 +1,32 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: git_repo_sync 
+  description: sync git repos between 2 repos. such as gitlab & github.
+  company: "Davyin"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.4
+  platforms:
+    - name: EL
+      versions:
+        - all
+    - name: Fedora
+      versions:
+        - all
+    - name: Amazon
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+        - bionic
+  galaxy_tags:
+    - git
+    - sync
+
+allow_duplicates: true
