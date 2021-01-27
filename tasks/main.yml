@@ -31,4 +31,5 @@
   tags: configuration
  
 - name: Push the repo to alternate remote
-  shell: 'git --git-dir={{ git_dir }}/{{ repo_name }}/.git push --all mirrored'
+  shell: 'git --git-dir={{ git_dir }}/{{ repo_name }}/.git push mirrored {{ item }}'
+  with_items: "{{ branches }}"
