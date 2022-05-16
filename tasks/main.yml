@@ -42,4 +42,4 @@
   
 - name: push tag {{ item }}.
   shell: 'git --git-dir={{ git_dir }}/{{ repo_name }}/.git push mirrored {{ item }}'
-  with_items: "{{ tags.stdout }}"
+  with_items: "{{ tags.stdout_lines }}"
