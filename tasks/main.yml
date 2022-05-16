@@ -21,6 +21,8 @@
         git --git-dir={{ git_dir }}/{{ repo_name }}/.git checkout --track origin/{{ item }}
     fi
   with_items: "{{ branches }}"
+- name: fetch remote tags
+  shell: git fetch --tags --force --progress -- {{ source_url }} +refs/heads/*:refs/remotes/origin/*
 
 - name: Add alternate remote
   ini_file:
@@ -33,3 +35,11 @@
 - name: Push the repo to alternate remote
   shell: 'git --git-dir={{ git_dir }}/{{ repo_name }}/.git push mirrored {{ item }}'
   with_items: "{{ branches }}"
+
+- name: get latest 3 tags
+  shell: git for-each-ref refs/tags/* --sort=-authordate  --format='%(refname)' --count=3|awk -F/ '{print $3;}'
+  register: tags
+  
+- name: push tag {{ item }}.
+  shell: 'git --git-dir={{ git_dir }}/{{ repo_name }}/.git push mirrored {{ item }}'
+  with_items: "{{ tags.stdout }}"
