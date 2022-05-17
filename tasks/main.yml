@@ -38,7 +38,7 @@
 
 - name: get latest 3 tags
   shell:
-    cmd: git for-each-ref refs/tags/* --sort=-authordate  --format='%(refname)' --count=3|awk -F/ '{print $3;}'
+    cmd: "git for-each-ref refs/tags/* --sort=-authordate  --format='%(refname)' --count=3|awk -F/ '{print $3;}'"
     chdir: {{ git_dir }}
   register: tags
   
